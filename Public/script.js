@@ -11,6 +11,16 @@ function fetchTasks() {
             data.forEach(task => {
                 const li = document.createElement('li');
                 li.textContent = task.description + (task.completed ? ' (completed)' : '');
+                const deleteBtn = document.createElement('span');
+                deleteBtn.innerHTML = '🗑️';
+                deleteBtn.style.cursor = 'pointer';
+                deleteBtn.onclick = function() { deleteTask(task.id); };
+                const editBtn = document.createElement('span');
+                editBtn.innerHTML = '✏️';
+                editBtn.style.cursor = 'pointer';
+                editBtn.onclick = function() { editTask(task.id); };
+                li.appendChild(deleteBtn);
+                li.appendChild(editBtn);
                 tasks.appendChild(li);
             });
         });
@@ -27,7 +37,28 @@ function addTask() {
     })
     .then(response => response.json())
     .then(() => {
-        fetchTasks(); // Refresh the list
-        document.getElementById('newTask').value = ''; // Clear the input
+        fetchTasks();
+        document.getElementById('newTask').value = '';
+    });
+}
+
+function deleteTask(id) {
+    fetch(`/api/tasks/${id}`, {
+        method: 'DELETE'
+    }).then(() => {
+        fetchTasks();
+    });
+}
+
+function editTask(id) {
+    const newDescription = prompt('Edit the task:');
+    fetch(`/api/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ description: newDescription, completed: false })
+    }).then(() => {
+        fetchTasks();
     });
 }

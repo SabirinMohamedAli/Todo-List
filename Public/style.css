@@ -57,3 +57,18 @@ li.completed {
     text-decoration: line-through;
     color: #777;
 }
+
+li {
+    background-color: #e9ecef;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+li span {
+    margin-left: 10px;
+}
+
